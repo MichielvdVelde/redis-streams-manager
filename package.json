@@ -1,0 +1,25 @@
+{
+  "name": "redis-streams-manager",
+  "version": "0.0.1",
+  "description": "Easy and simple stream manager for Redis",
+  "main": "./dist/index.js",
+  "author": "Michiel van der Velde <michiel@michielvdvelde.nl>",
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=13"
+  },
+  "keywords": [
+    "redis",
+    "streams",
+    "events"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@types/ioredis": "^4.14.8"
+  },
+  "peerDependencies": {
+    "ioredis": "^4.16.0"
+  }
+}
