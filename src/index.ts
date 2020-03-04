@@ -6,7 +6,7 @@ import { Redis } from 'ioredis'
 import { delay, array2object } from './util'
 
 export interface StreamListener<T = { [key: string]: string }> {
-  (data: T, id: string): void
+  (data: T, id: string, name: string): void
 }
 
 export default class StreamsManager extends EventEmitter {
@@ -61,7 +61,7 @@ export default class StreamsManager extends EventEmitter {
             const args = array2object(event[1])
 
             this._streams.set(name, id)
-            this.emit(name, args, id)
+            this.emit(name, args, id, name)
           }
         }
 
@@ -87,12 +87,12 @@ export default class StreamsManager extends EventEmitter {
   }
 
   public once<T extends { [key: string]: string }> (stream: string, listener: StreamListener<T>) {
-    super.once(stream, (data: T, id: string) => {
+    super.once(stream, (data: T, id: string, name: string) => {
       if (!this.listenerCount(stream)) {
         this.remove(stream)
       }
 
-      listener(data, id)
+      listener(data, id, name)
     })
 
     if (!this._streams.has(stream)) {

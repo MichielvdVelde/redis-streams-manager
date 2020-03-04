@@ -32,9 +32,10 @@ const blockingClient = new IORedis()
 const streams = new StreamsManager(blockingClient)
 
 // define a listener
-const listener: StreamListener = (data, id) => {
+const listener: StreamListener = (data, id, name) => {
   // `data` is a key-value object
-  // id is the stream message id
+  // `id` is the stream message id
+  // `name` is the stream name
 }
 
 // consumption will start automatically
