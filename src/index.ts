@@ -120,6 +120,16 @@ export default class StreamsManager extends EventEmitter {
     return this
   }
 
+  public prependListener (stream: string, listener: StreamListener) {
+    super.prependListener(stream, listener)
+
+    if (!this._streams.has(stream)) {
+      this.add(stream)
+    }
+
+    return this
+  }
+
   public add (...streams: ({ key: string, id?: string } | string)[]) {
     for (let stream of streams) {
       if (typeof stream === 'string') {
