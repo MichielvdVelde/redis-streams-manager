@@ -5,7 +5,11 @@ import { Redis } from 'ioredis'
 
 import { delay, array2object } from './util'
 
-export interface StreamListener<T = { [key: string]: string }> {
+export interface StreamData {
+  [key: string]: string
+}
+
+export interface StreamListener<T = StreamData> {
   (data: T, id: string, name: string): void
 }
 
@@ -76,15 +80,15 @@ export default class StreamsManager extends EventEmitter {
     }
   }
 
-  public on<T extends { [key: string]: string }> (stream: string, listener: StreamListener<T>) {
+  public on<T extends StreamData> (stream: string, listener: StreamListener<T>) {
     return this.addListener(stream, listener)
   }
 
-  public off (stream: string, listener: StreamListener<any>) {
+  public off (stream: string, listener: StreamListener) {
     return this.removeListener(stream, listener)
   }
 
-  public once<T extends { [key: string]: string }> (stream: string, listener: StreamListener<T>) {
+  public once<T extends StreamData> (stream: string, listener: StreamListener<T>) {
     super.once(stream, (data: T, id: string, name: string) => {
       if (!this.listenerCount(stream)) {
         this.remove(stream)
@@ -100,7 +104,7 @@ export default class StreamsManager extends EventEmitter {
     return this
   }
 
-  public addListener (stream: string, listener: StreamListener<any>) {
+  public addListener<T extends StreamData> (stream: string, listener: StreamListener<T>) {
     super.addListener(stream, listener)
 
     if (!this._streams.has(stream)) {
@@ -110,7 +114,7 @@ export default class StreamsManager extends EventEmitter {
     return this
   }
 
-  public removeListener (stream: string, listener: StreamListener<any>) {
+  public removeListener (stream: string, listener: StreamListener) {
     super.removeListener(stream, listener)
 
     if (!this.listenerCount(stream)) {
@@ -120,7 +124,7 @@ export default class StreamsManager extends EventEmitter {
     return this
   }
 
-  public prependListener (stream: string, listener: StreamListener) {
+  public prependListener<T extends StreamData> (stream: string, listener: StreamListener<T>) {
     super.prependListener(stream, listener)
 
     if (!this._streams.has(stream)) {
