@@ -166,6 +166,10 @@ export default class StreamsManager extends EventEmitter {
   }
 
   public add (...streams: ({ key: string, id?: string } | string)[]) {
+    if (!streams.length) {
+      throw new TypeError('add() expects at least one stream')
+    }
+
     for (let stream of streams) {
       if (typeof stream === 'string') {
         stream = { key: stream }
@@ -182,6 +186,10 @@ export default class StreamsManager extends EventEmitter {
   }
 
   public remove (...streams: string[]) {
+    if (!streams.length) {
+      throw new TypeError('remove() expects at least one stream')
+    }
+
     for (const stream of streams) {
       this._streams.delete(stream)
       super.removeAllListeners(stream)
