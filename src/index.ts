@@ -58,16 +58,19 @@ export default class StreamsManager extends EventEmitter {
 
         for (const stream of data) {
           const name = stream[0]
+
+          if (!this._streams.has(name)) {
+            continue
+          }
+
           const events = stream[1]
 
           for (const event of events) {
             const id = event[0]
             const args = array2object(event[1])
 
-            if (this._streams.has(name)) {
-              this._streams.set(name, id)
-              this.emit(name, args, id, name)
-            }
+            this._streams.set(name, id)
+            this.emit(name, args, id, name)
           }
         }
 
