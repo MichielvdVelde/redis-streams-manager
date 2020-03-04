@@ -77,13 +77,7 @@ export default class StreamsManager extends EventEmitter {
   }
 
   public on<T extends { [key: string]: string }> (stream: string, listener: StreamListener<T>) {
-    super.on(stream, listener)
-
-    if (!this._streams.has(stream)) {
-      this.add(stream)
-    }
-
-    return this
+    return this.addListener(stream, listener)
   }
 
   public off (stream: string, listener: StreamListener<any>) {
@@ -98,6 +92,16 @@ export default class StreamsManager extends EventEmitter {
 
       listener(data, id, name)
     })
+
+    if (!this._streams.has(stream)) {
+      this.add(stream)
+    }
+
+    return this
+  }
+
+  public addListener (stream: string, listener: StreamListener<any>) {
+    super.addListener(stream, listener)
 
     if (!this._streams.has(stream)) {
       this.add(stream)
