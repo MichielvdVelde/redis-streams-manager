@@ -46,7 +46,7 @@ streams.on('myStream', listener)
 streams.removeListener('myStream', listener)
 
 // manually add one or more streams
-// if `id` is amitted, defaults to `$`
+// if `id` is omitted, defaults to `$`
 streams.add('myStream', { key: 'myStream', id: '$' })
 
 // manually remove one or more streams
