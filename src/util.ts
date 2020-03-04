@@ -4,6 +4,8 @@ export async function delay (ms: number) {
   return new Promise<void>(resolve => setTimeout(resolve, ms))
 }
 
+// extracted/copied from bullmq
+// https://github.com/taskforcesh/bullmq/blob/master/src/utils.ts
 export function array2object (arr: any[]) {
   const obj: { [index: string]: string } = {}
 
