@@ -5,8 +5,6 @@
     "moduleResolution": "node",
     "removeComments": true,
     "preserveConstEnums": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
     "esModuleInterop": true,
     "noImplicitAny": true,
     "declaration": true,
