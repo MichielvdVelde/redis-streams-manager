@@ -10,7 +10,10 @@ Streams, and emits new entries by stream name.
 Extracted from a personal project in which I required an easy way to work
 with multiple streams.
 
-IORedis is marked as a peer dependency, you'll need to install it yourself.
+[ioredis](https://github.com/luin/ioredis) is marked as a peer dependency,
+you'll need to install it yourself.
+
+The code was heavily inspired by [BullMQ](https://github.com/taskforcesh/bullmq/blob/master/src/classes/queue-events.ts).
 
 ## Install
 
