@@ -86,6 +86,10 @@ export default class StreamsManager extends EventEmitter {
     return this
   }
 
+  public off (stream: string, listener: StreamListener<any>) {
+    return this.removeListener(stream, listener)
+  }
+
   public once<T extends { [key: string]: string }> (stream: string, listener: StreamListener<T>) {
     super.once(stream, (data: T, id: string, name: string) => {
       if (!this.listenerCount(stream)) {
