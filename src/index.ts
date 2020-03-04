@@ -134,6 +134,22 @@ export default class StreamsManager extends EventEmitter {
     return this
   }
 
+  public prependOnceListener<T extends StreamData> (stream: string, listener: StreamListener<T>) {
+    super.prependOnceListener(stream, (data: T, id: string, name: string) => {
+      if (!this.listenerCount(stream)) {
+        this.remove(stream)
+      }
+
+      listener(data, id, name)
+    })
+
+    if (!this._streams.has(stream)) {
+      this.add(stream)
+    }
+
+    return this
+  }
+
   public removeAllListeners (stream?: string) {
     if (stream) {
       this.remove(stream)
