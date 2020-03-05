@@ -4,8 +4,9 @@ Easy Redis Streams manager. The manager handles the consumption of multiple
 Streams, and emits new entries by stream name.
 
 * Is an `EventEmitter` which emits stream entries by stream name
-* Use `on` and `once` for automatic starting and stopping
-* Use `removeListener` for automatic stopping
+* Patches the emitter methods (`on`, `off`, etc) to automatically
+start and stop consumption
+* Ability to add streams starting from an id, instead of the default `$`
 
 Extracted from a personal project in which I required an easy way to work
 with multiple streams.
