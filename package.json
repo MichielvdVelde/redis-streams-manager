@@ -4,6 +4,10 @@
   "description": "Easy and simple stream manager for Redis",
   "main": "./dist/index.js",
   "author": "Michiel van der Velde <michiel@michielvdvelde.nl>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MichielvdVelde/redis-streams-manager.git"
+  },
   "files": [
     "dist"
   ],
