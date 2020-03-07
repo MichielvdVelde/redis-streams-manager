@@ -32,7 +32,7 @@ Small and confusing example. See the source code for more information.
 
 ```ts
 import IORedis from 'ioredis'
-import StreamsManager, { StreamsListener } from 'redis-streams-manager'
+import StreamsManager, { StreamListener } from 'redis-streams-manager'
 
 const blockingClient = new IORedis()
 // manager uses blocking commands,
