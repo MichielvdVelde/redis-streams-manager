@@ -13,14 +13,24 @@ export interface StreamListener<T = StreamData> {
   (data: T, id: string, name: string): void
 }
 
+export interface StreamManagerOptions {
+  blockingTimeout?: number,
+  count?: number
+}
+
 export default class StreamsManager extends EventEmitter {
   private _started = false
   private _streams: Map<string, string> = new Map()
   private _client: Redis
+  private _opts: StreamManagerOptions
 
-  public constructor (blockingClient: Redis) {
+  public constructor (blockingClient: Redis, opts: StreamManagerOptions = {}) {
     super()
     this._client = blockingClient
+    this._opts = {
+      blockingTimeout: 10000,
+      ...opts
+    }
   }
 
   public get started () {
@@ -45,11 +55,7 @@ export default class StreamsManager extends EventEmitter {
     while (this._started) {
       try {
         const data = await this._client.xread(
-          'BLOCK',
-          10000,
-          'STREAMS',
-          ...this._streams.keys(),
-          ...this._streams.values()
+          ...this._buildCommandArgs()
         ) as any
 
         if (!data) {
@@ -83,6 +89,24 @@ export default class StreamsManager extends EventEmitter {
         await delay(5000)
       }
     }
+  }
+
+  private _buildCommandArgs () {
+    const args: (string | number)[] = [
+      'BLOCK', this._opts.blockingTimeout
+    ]
+
+    if (this._opts.count) {
+      args.push('COUNT', this._opts.count)
+    }
+
+    args.push(
+      'STREAMS',
+      ...this._streams.keys(),
+      ...this._streams.values()
+    )
+
+    return args
   }
 
   public on<T extends StreamData> (stream: string, listener: StreamListener<T>) {

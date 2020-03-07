@@ -37,7 +37,10 @@ import StreamsManager, { StreamListener } from 'redis-streams-manager'
 const blockingClient = new IORedis()
 // manager uses blocking commands,
 // so it needs a dedicated Redis connection!
-const streams = new StreamsManager(blockingClient)
+const streams = new StreamsManager(blockingClient, {
+  blockingTimeout: 10000, // defaults to 10000ms (10s)
+  count: 5 // max entries per stream, optional, default not set
+})
 
 // define a listener
 const listener: StreamListener = (data, id, name) => {
