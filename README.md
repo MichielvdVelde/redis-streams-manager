@@ -18,6 +18,10 @@ The code was heavily inspired by [BullMQ](https://github.com/taskforcesh/bullmq/
 
 ## Install
 
+Versions `0.x.x` are considered unstable and may have breaking changes (i.e. does
+not follow semver). When ready, version 1 will be the first stable release and
+will follow semver from then on.
+
 ```
 npm i redis-streams-manager
 ```
