@@ -37,6 +37,10 @@ export default class StreamsManager extends EventEmitter {
     return this._started
   }
 
+  public get size () {
+    return this._streams.size
+  }
+
   public start () {
     if (this._started || !this._streams.size) {
       return
