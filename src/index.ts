@@ -53,6 +53,10 @@ export default class StreamsManager extends EventEmitter {
     this._started = false
   }
 
+  public getId (stream: string) {
+    return this._streams.get(stream)
+  }
+
   private async _consumeEvents () {
     this._started = true
 
