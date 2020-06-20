@@ -187,16 +187,15 @@ export default class StreamsManager extends EventEmitter {
     return this
   }
 
-  public removeAllListeners (stream?: string) {
-    if (stream) {
-      this.remove(stream)
-      super.removeAllListeners(stream)
-    } else {
-      if (this._streams.size) {
-        this.remove(...this._streams.keys())
-      }
-
+  public removeAllListeners (...streams: string[]) {
+    if (!streams.length) {
       super.removeAllListeners()
+    } else {
+      this.remove(...streams)
+
+      for (const stream of streams) {
+        super.removeAllListeners(stream)
+      }
     }
 
     return this
