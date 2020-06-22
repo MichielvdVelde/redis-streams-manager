@@ -41,6 +41,10 @@ export default class StreamsManager extends EventEmitter {
     return this._streams.size
   }
 
+  public has (stream: string) {
+    return this._streams.has(stream)
+  }
+
   public start () {
     if (this._started || !this._streams.size) {
       return
@@ -117,22 +121,24 @@ export default class StreamsManager extends EventEmitter {
     return args
   }
 
-  public on<T extends StreamData> (stream: string, listener: StreamListener<T>) {
-    return this.addListener(stream, listener)
+  public on<T extends StreamData> (stream: string, ...listeners: StreamListener<T>[]) {
+    return this.addListeners(stream, ...listeners)
   }
 
-  public off (stream: string, listener: StreamListener) {
-    return this.removeListener(stream, listener)
+  public off (stream: string, ...listeners: StreamListener[]) {
+    return this.removeListeners(stream, ...listeners)
   }
 
-  public once<T extends StreamData> (stream: string, listener: StreamListener<T>) {
-    super.once(stream, (data: T, id: string, name: string) => {
-      if (!this.listenerCount(stream)) {
-        this.remove(stream)
-      }
+  public once<T extends StreamData> (stream: string, ...listeners: StreamListener<T>[]) {
+    for (const listener of listeners) {
+      super.once(stream, (data: T, id: string, name: string) => {
+        if (!this.listenerCount(stream)) {
+          this.remove(stream)
+        }
 
-      listener(data, id, name)
-    })
+        listener(data, id, name)
+      })
+    }
 
     if (!this._streams.has(stream)) {
       this.add(stream)
@@ -142,7 +148,13 @@ export default class StreamsManager extends EventEmitter {
   }
 
   public addListener<T extends StreamData> (stream: string, listener: StreamListener<T>) {
-    super.addListener(stream, listener)
+    return this.addListeners(stream, listener)
+  }
+
+  public addListeners<T extends StreamData> (stream: string, ...listeners: StreamListener<T>[]) {
+    for (const listener of listeners) {
+      super.addListener(stream, listener)
+    }
 
     if (!this._streams.has(stream)) {
       this.add(stream)
@@ -152,7 +164,13 @@ export default class StreamsManager extends EventEmitter {
   }
 
   public removeListener (stream: string, listener: StreamListener) {
-    super.removeListener(stream, listener)
+    return this.removeListeners(stream, listener)
+  }
+
+  public removeListeners (stream: string, ...listeners: StreamListener[]) {
+    for (const listener of listeners) {
+      super.removeListener(stream, listener)
+    }
 
     if (!this.listenerCount(stream)) {
       this.remove(stream)
@@ -162,7 +180,13 @@ export default class StreamsManager extends EventEmitter {
   }
 
   public prependListener<T extends StreamData> (stream: string, listener: StreamListener<T>) {
-    super.prependListener(stream, listener)
+    return this.prependListeners(stream, listener)
+  }
+
+  public prependListeners<T extends StreamData> (stream: string, ...listeners: StreamListener<T>[]) {
+    for (const listener of listeners) {
+      super.prependListener(stream, listener)
+    }
 
     if (!this._streams.has(stream)) {
       this.add(stream)
@@ -172,13 +196,19 @@ export default class StreamsManager extends EventEmitter {
   }
 
   public prependOnceListener<T extends StreamData> (stream: string, listener: StreamListener<T>) {
-    super.prependOnceListener(stream, (data: T, id: string, name: string) => {
-      if (!this.listenerCount(stream)) {
-        this.remove(stream)
-      }
+    return this.prependOnceListeners(stream, listener)
+  }
 
-      listener(data, id, name)
-    })
+  public prependOnceListeners<T extends StreamData> (stream: string, ...listeners: StreamListener<T>[]) {
+    for (const listener of listeners) {
+      super.prependOnceListener(stream, (data: T, id: string, name: string) => {
+        if (!this.listenerCount(stream)) {
+          this.remove(stream)
+        }
+
+        listener(data, id, name)
+      })
+    }
 
     if (!this._streams.has(stream)) {
       this.add(stream)
