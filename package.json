@@ -21,7 +21,7 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@types/ioredis": "^4.16.5"
+    "@types/ioredis": "^4.17.2"
   },
   "peerDependencies": {
     "ioredis": "^4.17.3"
