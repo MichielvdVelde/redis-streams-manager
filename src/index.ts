@@ -5,12 +5,8 @@ import { Redis } from 'ioredis'
 
 import { delay, array2object } from './util'
 
-export interface StreamData {
-  [key: string]: string
-}
-
-export interface StreamListener<T = StreamData> {
-  (data: T, id: string, name: string): void
+export interface StreamListener {
+  (data: Record<string, string>, id: string, name: string): void
 }
 
 export interface StreamManagerOptions {
@@ -121,7 +117,7 @@ export default class StreamsManager extends EventEmitter {
     return args
   }
 
-  public on<T extends StreamData> (stream: string, ...listeners: StreamListener<T>[]) {
+  public on (stream: string, ...listeners: StreamListener[]) {
     return this.addListeners(stream, ...listeners)
   }
 
@@ -129,9 +125,9 @@ export default class StreamsManager extends EventEmitter {
     return this.removeListeners(stream, ...listeners)
   }
 
-  public once<T extends StreamData> (stream: string, ...listeners: StreamListener<T>[]) {
+  public once (stream: string, ...listeners: StreamListener[]) {
     for (const listener of listeners) {
-      super.once(stream, (data: T, id: string, name: string) => {
+      super.once(stream, (data: Record<string, string>, id: string, name: string) => {
         if (!this.listenerCount(stream)) {
           this.remove(stream)
         }
@@ -147,11 +143,11 @@ export default class StreamsManager extends EventEmitter {
     return this
   }
 
-  public addListener<T extends StreamData> (stream: string, listener: StreamListener<T>) {
+  public addListener (stream: string, listener: StreamListener) {
     return this.addListeners(stream, listener)
   }
 
-  public addListeners<T extends StreamData> (stream: string, ...listeners: StreamListener<T>[]) {
+  public addListeners (stream: string, ...listeners: StreamListener[]) {
     for (const listener of listeners) {
       super.addListener(stream, listener)
     }
@@ -179,11 +175,11 @@ export default class StreamsManager extends EventEmitter {
     return this
   }
 
-  public prependListener<T extends StreamData> (stream: string, listener: StreamListener<T>) {
+  public prependListener (stream: string, listener: StreamListener) {
     return this.prependListeners(stream, listener)
   }
 
-  public prependListeners<T extends StreamData> (stream: string, ...listeners: StreamListener<T>[]) {
+  public prependListeners (stream: string, ...listeners: StreamListener[]) {
     for (const listener of listeners) {
       super.prependListener(stream, listener)
     }
@@ -195,13 +191,13 @@ export default class StreamsManager extends EventEmitter {
     return this
   }
 
-  public prependOnceListener<T extends StreamData> (stream: string, listener: StreamListener<T>) {
+  public prependOnceListener (stream: string, listener: StreamListener) {
     return this.prependOnceListeners(stream, listener)
   }
 
-  public prependOnceListeners<T extends StreamData> (stream: string, ...listeners: StreamListener<T>[]) {
+  public prependOnceListeners (stream: string, ...listeners: StreamListener[]) {
     for (const listener of listeners) {
-      super.prependOnceListener(stream, (data: T, id: string, name: string) => {
+      super.prependOnceListener(stream, (data: Record<string, string>, id: string, name: string) => {
         if (!this.listenerCount(stream)) {
           this.remove(stream)
         }
